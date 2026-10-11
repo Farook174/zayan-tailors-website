@@ -87,4 +87,26 @@ document.getElementById('searchForm').addEventListener('submit',e=>{e.preventDef
 document.getElementById('productGrid').addEventListener('click',e=>{let add=e.target.closest('[data-add]'),order=e.target.closest('[data-order]');if(add){let p=products.find(x=>x.id===Number(add.dataset.add));cart.push(p);document.getElementById('cartCount').textContent=cart.length;toast(p.name+' কার্টে যোগ হয়েছে');}if(order){let p=products.find(x=>x.id===Number(order.dataset.order));let msg=`আসসালামু আলাইকুম, Zayan Tailors। আমি ${p.name} সম্পর্কে জানতে চাই। প্রদর্শিত মূল্য: ${money(p.price)}।`;window.open('https://wa.me/8801701101410?text='+encodeURIComponent(msg),'_blank','noopener');}});
 document.getElementById('cartButton').addEventListener('click',()=>{if(!cart.length){toast('আপনার কার্ট এখনো খালি।');return}let lines=cart.map((p,i)=>`${i+1}. ${p.name} — ${money(p.price)}`).join('\n');let total=cart.reduce((s,p)=>s+p.price,0);let msg=`আসসালামু আলাইকুম, Zayan Tailors। আমার পছন্দের আইটেম:\n${lines}\nমোট আনুমানিক: ${money(total)}\nদয়া করে অর্ডার নিশ্চিত করতে সাহায্য করুন।`;window.open('https://wa.me/8801701101410?text='+encodeURIComponent(msg),'_blank','noopener')});
 render();
+</script>
+<script>
+/* Independent catalog recovery: still show products if the main storefront script fails. */
+(function(){
+  function recoverCatalog(){
+    var grid=document.getElementById('productGrid');
+    if(!grid || grid.children.length) return;
+    var items=[
+      {name:'এমব্রয়ডারি থ্রি-পিস',cat:'Three-Piece',price:1850,img:'https://www.indiansilkhouseagencies.com/cdn/shop/files/ACA1587-1.jpg?v=1761396310&width=700'},
+      {name:'প্রিমিয়াম লন থ্রি-পিস',cat:'Three-Piece',price:1450,img:'https://wholetex.sgp1.cdn.digitaloceanspaces.com/full/sayuri-designer-rubal-georgette-suit-8539.jpg'},
+      {name:'পার্টি ওয়্যার লেহেঙ্গা',cat:'Lehenga',price:6500,img:'https://img0.junaroad.com/uiproducts/15619177/zoom_0-1538988785.jpg'},
+      {name:'এলিগ্যান্ট পার্টি ড্রেস',cat:'Party Dress',price:3800,img:'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=700&q=85'},
+      {name:'ফ্লোর-লেংথ গাউন',cat:'Gown',price:5200,img:'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=700&q=85'},
+      {name:'কুর্তি ও সালোয়ার কামিজ',cat:'Three-Piece',price:1200,img:'https://images.unsplash.com/photo-1583391733956-6c78276477e5?auto=format&fit=crop&w=700&q=85'}
+    ];
+    grid.innerHTML=items.map(function(p){
+      var msg='আসসালামু আলাইকুম, Zayan Tailors। আমি '+p.name+' সম্পর্কে জানতে চাই। মূল্য: ৳'+p.price+'.';
+      return '<article class="product"><div class="product-art" style="background-image:url(&quot;'+p.img+'&quot;)"><span class="tag">কালেকশন</span></div><div class="product-body"><h3>'+p.name+'</h3><div class="desc">'+p.cat+'</div><div class="price">৳'+p.price.toLocaleString('en-US')+'</div><div class="product-actions"><button class="buy" onclick="window.open(\'https://wa.me/8801701101410?text=\'+encodeURIComponent('+JSON.stringify(msg)+'),\'_blank\')">অর্ডার করুন</button></div></div></article>';
+    }).join('');
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',recoverCatalog); else recoverCatalog();
+})();
 </script></body></html>
